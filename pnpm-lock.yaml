@@ -8,6 +8,49 @@ importers:
 
   .: {}
 
+  app/playground:
+    dependencies:
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.56
+        version: 18.2.63
+      '@types/react-dom':
+        specifier: ^18.2.19
+        version: 18.2.20
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.0.2
+        version: 7.1.1(@typescript-eslint/parser@7.1.1)(eslint@8.57.0)(typescript@5.3.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.0.2
+        version: 7.1.1(eslint@8.57.0)(typescript@5.3.3)
+      '@vitejs/plugin-react':
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.1.5)
+      eslint:
+        specifier: ^8.56.0
+        version: 8.57.0
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.0(eslint@8.57.0)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.5
+        version: 0.4.5(eslint@8.57.0)
+      neuma:
+        specifier: workspace:^
+        version: link:../../lib/neuma
+      typescript:
+        specifier: ^5.2.2
+        version: 5.3.3
+      vite:
+        specifier: ^5.1.4
+        version: 5.1.5
+
   apps/playground:
     dependencies:
       react:
@@ -44,6 +87,22 @@ importers:
       neuma:
         specifier: workspace:^
         version: link:../../packages/neuma
+      typescript:
+        specifier: ^5.2.2
+        version: 5.3.3
+      vite:
+        specifier: ^5.1.4
+        version: 5.1.5
+
+  lib/neuma:
+    dependencies:
+      vite-plugin-dts:
+        specifier: ^3.7.3
+        version: 3.7.3(typescript@5.3.3)(vite@5.1.5)
+    devDependencies:
+      pathe:
+        specifier: ^1.1.2
+        version: 1.1.2
       typescript:
         specifier: ^5.2.2
         version: 5.3.3
