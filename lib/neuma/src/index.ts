@@ -94,22 +94,29 @@
 //   };
 // };
 
-type TaskCreator = any;
-type Task = {
-  key: string;
-  value: TaskValue;
-};
-type Manager = any;
 type TaskValue = number | string | object;
 
-type Store = any;
-type State = any;
-type Observer = (state: any) => void;
+type Task<T extends TaskValue = TaskValue> = {
+  key: string;
+  value: T;
+};
+
+type Store<T extends TaskValue> = {
+  getState: () => T;
+  setState: (newState: Partial<T>) => void;
+  subscribe: (observer: (state: T) => void) => () => void;
+};
+
+type Manager<T extends TaskValue> = {
+  state: T;
+  setState: (newState: Partial<T>) => void;
+  subscribe: (callback: (state: T) => void) => () => void;
+};
 
 // Should implement the store as an Observable
-const createStore = (task: Task): Store => {
-  let state: State = task.value || {}; // Default to empty object if no initial state
-  const observers: Observer[] = [];
+const createStore = <T extends TaskValue>(task: Task<T>): Store<T> => {
+  let state: T = task.value as T; // Default to task value
+  const observers: ((state: T) => void)[] = [];
 
   // Notify all observers about state changes
   const notifyObservers = () => {
@@ -117,13 +124,17 @@ const createStore = (task: Task): Store => {
   };
 
   // Method to update the state and notify observers
-  const setState = (newState: State) => {
-    state = { ...state, ...newState }; // Merge new state with the current state
+  const setState = (newState: Partial<T>) => {
+    if (typeof state === "object" && state !== null) {
+      state = { ...state, ...newState } as T;
+    } else {
+      state = newState as T;
+    }
     notifyObservers();
   };
 
   // Allow components to subscribe to state changes
-  const subscribe = (observer: Observer) => {
+  const subscribe = (observer: (state: T) => void) => {
     observers.push(observer);
     // Immediately notify the new observer with the current state
     observer(state);
@@ -138,9 +149,6 @@ const createStore = (task: Task): Store => {
     };
   };
 
-  // Initial setup or actions based on taskConfig can be added here
-  // For example, using taskConfig.value to set initial state or actions
-
   return {
     getState: () => state,
     setState,
@@ -148,20 +156,28 @@ const createStore = (task: Task): Store => {
   };
 };
 
-export const useManager = (task: Task): Manager => {
+export const useManager = <T extends TaskValue>(task: Task<T>): Manager<T> => {
   const store = createStore(task);
 
-  return {};
+  return {
+    get state() {
+      return store.getState();
+    },
+    setState: store.setState,
+    subscribe: store.subscribe,
+  };
 };
 
+type TaskCreator = <T extends TaskValue>(taskValue: T) => Task<T>;
+
 let taskCount = 0;
-export const task: TaskCreator = (taskValue: TaskValue): Task => {
+export const task: TaskCreator = <T extends TaskValue>(
+  taskValue: T
+): Task<T> => {
   const key = `task-${taskCount++}`;
 
-  const config = {
+  return {
     key,
     value: taskValue,
   };
-
-  return config;
 };

@@ -1,25 +1,50 @@
-import { atom, useAtom } from "jotai";
+import { task, useManager } from "neuma";
+import { useEffect, useState } from "react";
 
-const countAtom = atom(0);
-// const countryAtom = atom("Japan");
-// const citiesAtom = atom(["Tokyo", "Kyoto", "Osaka"]);
-// const mangaAtom = atom({
-//   "Dragon Ball": 1984,
-//   "One Piece": 1997,
-//   Naruto: 1999,
-// });
+type CounterState = {
+  count: number;
+};
+
+// Create a task for our counter
+const counterTask = task({ count: 0 });
+
 function App() {
-  // const [count, setCount] = useState(0);
-  const [count, setCount] = useAtom(countAtom);
+  // Get the manager instance
+  const manager = useManager(counterTask);
+  // Local state to trigger re-renders
+  const [count, setCount] = useState(manager.state.count);
+
+  // Subscribe to state changes
+  useEffect(() => {
+    const unsubscribe = manager.subscribe((state: CounterState) => {
+      setCount(state.count);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [manager]);
+
+  const increment = () => {
+    manager.setState({ count: count + 1 });
+  };
+
+  const decrement = () => {
+    manager.setState({ count: count - 1 });
+  };
 
   return (
-    <>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+    <div className="card">
+      <h1>Neuma Counter Example</h1>
+      <div className="counter">
+        <button onClick={decrement}>-</button>
+        <span>Count: {count}</span>
+        <button onClick={increment}>+</button>
       </div>
-    </>
+      <p>
+        <small>Using neuma state management</small>
+      </p>
+    </div>
   );
 }
 
