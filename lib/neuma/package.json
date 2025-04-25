@@ -1,8 +1,26 @@
 {
   "name": "neuma",
   "private": false,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "description": "A lightweight, task-based state management library for React",
+  "keywords": [
+    "react",
+    "state-management",
+    "typescript",
+    "task",
+    "observable"
+  ],
+  "author": "Kyuhyun Han",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyuhyunhan/neuma.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kyuhyunhan/neuma/issues"
+  },
+  "homepage": "https://github.com/kyuhyunhan/neuma#readme",
   "files": [
     "dist"
   ],
@@ -19,7 +37,11 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
@@ -32,7 +54,6 @@
     "vite": "^5.1.4"
   },
   "dependencies": {
-    "react": "^18.2.0",
     "use-sync-external-store": "^1.2.0",
     "vite-plugin-dts": "^3.7.3"
   },
